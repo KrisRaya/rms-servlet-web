@@ -42,4 +42,11 @@ public interface Dao<T, ID>
      * @return true if operaion success
      */
     boolean delete(T o);
+
+    /**
+     * login to the rms
+     * @param o
+     * @return true if operation success
+     */
+    boolean login(T o);
 }

@@ -28,6 +28,7 @@
                 <tr>
                   <th class="mdl-data-table__cell--non-numeric">User Name</th>
                   <th>Password</th>
+                  <th><a class="mdl-navigation__link" href="insert"><button class="mdl-button mdl-js-button mdl-button--icon mdl-button--primary"><i class="material-icons icon-hover">add_circle_outline</i></button></a></th>
                 </tr>
               </thead>
               <tbody>
@@ -35,12 +36,58 @@
                   <tr>
                     <td class="mdl-data-table__cell--non-numeric"><c:out value = "${user.userName}"/></td>
                     <td><c:out value = "${user.password}"/></td>
+                    <td><a href="${pageContext.request.contextPath}/users/update?id=${user.id}" role="button">
+                    <button type="button" class="mdl-button mdl-js-button mdl-button--icon mdl-button--primary" value="${user.id}">
+                        <i class="material-icons icon-hover">edit</i>
+                        </button> </a>
+                    </td>
+                    <td><a href="${pageContext.request.contextPath}/users/delete?id=${user.id}" role="button">
+                        <button class="mdl-button mdl-js-button mdl-button--icon mdl-button--primary" value="${user.id}">
+                        <i class="material-icons icon-hover">delete</i></button></a>
+                    </td>
                   </tr>
               </c:forEach>
+
               </tbody>
             </table>
     	</main>
     </div>
+
+  <dialog class="mdl-dialog">
+    <h5 class="mdl-dialog__title">Edit Data</h5>
+    <form action="${pageContext.request.contextPath}/users" method="post">
+        <div class="mdl-textfield mdl-js-textfield">
+            <input class="mdl-textfield__input" type="hidden" id="id" name="id" value=""/>
+        </div>
+        <div class="mdl-textfield mdl-js-textfield">
+            <input class="mdl-textfield__input" type="text" id="username" name="username" value=""/>
+            <label class="mdl-textfield__label" for="username">Username</label>
+        </div>
+        <div class="mdl-textfield mdl-js-textfield">
+            <input class="mdl-textfield__input" type="password" id="userpass" name="password" value=""/>
+            <label class="mdl-textfield__label" for="userpass">Password</label>
+        </div>
+        <div class="mdl-dialog__actions">
+          <button type="button" class="mdl-button">Edit</button>
+          <button type="button" class="mdl-button close">Cancel</button>
+        </div>
+    </form>
+  </dialog>
+
   <script src="js/scripts.js"></script>
+  <script>
+      var dialog = document.querySelector('dialog');
+      var showDialogButton = document.querySelector('#show-dialog');
+      if (! dialog.showModal) {
+        dialogPolyfill.registerDialog(dialog);
+      }
+      showDialogButton.addEventListener('click', function() {
+        dialog.showModal();
+      });
+      dialog.querySelector('.close').addEventListener('click', function() {
+        dialog.close();
+      });
+    </script>
 </body>
+
 </html>

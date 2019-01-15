@@ -4,11 +4,7 @@ import com.mitrais.rms.dao.DataSourceFactory;
 import com.mitrais.rms.dao.UserDao;
 import com.mitrais.rms.model.User;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -89,6 +85,7 @@ public class UserDaoImpl implements UserDao
             PreparedStatement stmt = connection.prepareStatement("UPDATE user SET user_name=?, password=? WHERE id=?");
             stmt.setString(1, user.getUserName());
             stmt.setString(2, user.getPassword());
+            stmt.setLong(3, user.getId());
             int i = stmt.executeUpdate();
             if(i == 1) {
                 return true;
@@ -140,6 +137,27 @@ public class UserDaoImpl implements UserDao
         }
 
         return Optional.empty();
+    }
+
+    @Override
+    public boolean login(User user)
+    {
+        try (Connection connection = DataSourceFactory.getConnection())
+        {
+            PreparedStatement stmt = connection.prepareStatement("SELECT user_name,password FROM user WHERE user_name=? and password=?");
+            stmt.setString(1, user.getUserName());
+            stmt.setString(2, user.getPassword());
+            ResultSet rs = stmt.executeQuery();
+            if(rs.next()) {
+                return true;
+            }
+        }
+        catch (SQLException ex)
+        {
+            ex.printStackTrace();
+        }
+
+        return false;
     }
 
     private static class SingletonHelper

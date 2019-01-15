@@ -17,3 +17,7 @@
      your background is light. */
   color: white;
 }
+
+.icon-hover:hover{
+  cursor: pointer;
+}
